@@ -26,8 +26,8 @@ fun main() {
 
     fun Digit.findLastIndex(string: String): Int =
         maxOf(
-            string.indexOf(name, ignoreCase = true).foundOr(Int.MIN_VALUE),
-            string.indexOf("$ordinal").foundOr(Int.MIN_VALUE)
+            string.lastIndexOf(name, ignoreCase = true).foundOr(Int.MIN_VALUE),
+            string.lastIndexOf("$ordinal").foundOr(Int.MIN_VALUE)
         )
 
     fun part2(input: List<String>): Int {
