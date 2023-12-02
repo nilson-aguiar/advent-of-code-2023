@@ -1,6 +1,3 @@
-import org.assertj.core.api.Assertions.assertThat
-import kotlin.time.measureTime
-
 enum class Digit {
     zero, one, two, three, four, five, six, seven, eight, nine
 }
@@ -45,23 +42,5 @@ fun main() {
         }
     }
 
-    // test if implementation meets criteria from the description, like:
-    val part1TestInput = readInput("Day01_test")
-    assertThat(part1(part1TestInput)).isEqualTo(142)
-
-    val part2TestInput = readInput("Day01_test2")
-    assertThat(part2(part2TestInput)).isEqualTo(281)
-
-    val input = readInput("Day01")
-    println("Part 1:")
-    measureTime {
-        part1(input).println()
-    }.println()
-    println()
-
-
-    println("Part 2:")
-    measureTime {
-        part2(input).println()
-    }.println()
+    run("Day01", ::part1, ::part2, 142, 281)
 }
