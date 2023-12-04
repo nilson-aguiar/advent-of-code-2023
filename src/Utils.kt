@@ -10,7 +10,7 @@ import kotlin.time.measureTime
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = Path("src/$name.txt").readLines()
+fun readInput(name: String) = Path("src/resources/$name.txt").readLines()
 
 /**
  * Converts string to md5 hash.
@@ -49,9 +49,9 @@ fun <T> run(day:String,
 }
 
 fun String.createFiles(): String {
-    try { Path("src/$this.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
-    try { Path("src/${this}_test.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
-    try { Path("src/${this}_test2.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
+    try { Path("src/resources/$this.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
+    try { Path("src/resources/${this}_test.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
+    try { Path("src/resources/${this}_test2.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
 
     return this
 }
