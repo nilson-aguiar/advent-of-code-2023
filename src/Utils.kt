@@ -48,6 +48,9 @@ fun <T> run(day:String,
     }.println()
 }
 
+fun Sequence<Int>.product(): Int =
+    this.reduce { acc, i -> acc * i }
+
 fun String.createFiles(): String {
     try { Path("src/resources/$this.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
     try { Path("src/resources/${this}_test.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
