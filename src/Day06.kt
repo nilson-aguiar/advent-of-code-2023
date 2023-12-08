@@ -59,7 +59,7 @@ fun main() {
     run("Day06".createFiles(), ::part1, ::part2, 288, 71503L)
 }
 
-data class Race(
+private data class Race(
     val time: Long,
     val record: Long
 )

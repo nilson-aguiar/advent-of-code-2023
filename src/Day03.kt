@@ -69,12 +69,12 @@ fun main() {
     run("Day03".createFiles(), ::part1, ::part2, 4361, 467835)
 }
 
-data class Schema(
+private data class Schema(
     val parts: List<Part>,
     val symbols: List<Symbol>
 )
 
-data class Position(
+private data class Position(
     val row: Int,
     val rowPosition: Int
 ) {
@@ -91,7 +91,7 @@ data class Position(
 
 }
 
-data class Symbol(
+private data class Symbol(
     val part: Char,
     val position: Position
 ) {
@@ -100,7 +100,7 @@ data class Symbol(
     }
 }
 
-data class Part(
+private data class Part(
     val part: Int,
     val row: Int,
     val rowPosition: Int

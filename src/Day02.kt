@@ -1,4 +1,39 @@
-data class Game(
+
+
+fun main() {
+
+    fun part1(input: List<String>): Int {
+        val maxCubes = GameCubes(12, 13, 14)
+
+        return input.map { gameData ->
+            Game(gameData)
+        }.mapIndexed { index, game ->
+            if (game.gameContent <= maxCubes) {
+                println(game)
+                index + 1
+            } else {
+                println(game)
+                null
+            }
+        }
+            .filterNotNull()
+            .sum()
+    }
+
+    fun part2(input: List<String>): Int {
+        return input.map { gameData ->
+            Game(gameData)
+        }.sumOf {
+            with(it.gameContent) {
+                red * green * blue
+            }
+        }
+    }
+
+    run("Day02".createFiles(), ::part1, ::part2, 8, 2286)
+}
+
+private data class Game(
     val gameName: String,
     val gameContent: GameCubes
 ) {
@@ -12,7 +47,7 @@ data class Game(
     }
 }
 
-data class GameCubes(
+private data class GameCubes(
     val red: Int,
     val green: Int,
     val blue: Int
@@ -46,37 +81,4 @@ data class GameCubes(
             )
         }
     }
-}
-
-fun main() {
-
-    fun part1(input: List<String>): Int {
-        val maxCubes = GameCubes(12, 13, 14)
-
-        return input.map { gameData ->
-            Game(gameData)
-        }.mapIndexed { index, game ->
-            if (game.gameContent <= maxCubes) {
-                println(game)
-                index + 1
-            } else {
-                println(game)
-                null
-            }
-        }
-            .filterNotNull()
-            .sum()
-    }
-
-    fun part2(input: List<String>): Int {
-        return input.map { gameData ->
-            Game(gameData)
-        }.sumOf {
-            with(it.gameContent) {
-                red * green * blue
-            }
-        }
-    }
-
-    run("Day02".createFiles(), ::part1, ::part2, 8, 2286)
 }

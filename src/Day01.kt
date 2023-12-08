@@ -1,4 +1,4 @@
-enum class Digit {
+private enum class Digit {
     zero, one, two, three, four, five, six, seven, eight, nine
 }
 

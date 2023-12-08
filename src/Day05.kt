@@ -116,18 +116,13 @@ private fun mapData(input: List<String>): Pair<List<String>, MutableMap<String, 
     return Pair(seeds, maps)
 }
 
-data class Almanac(
-    val seeds: List<Long>,
-    val maps: Map<String, List<Long>>
-)
-
-data class Converter(
+private data class Converter(
     val source: Location,
     val destination: Location,
     val convertTo: String
 )
 
-data class Location(
+private data class Location(
     val start: Long,
     val end: Long,
     val type: String
