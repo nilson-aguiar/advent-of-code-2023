@@ -19,6 +19,8 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
     .toString(16)
     .padStart(32, '0')
 
+
+fun <T> Collection<T>?.println() = this?.forEach { it.println() } ?: println("null")
 /**
  * The cleaner shorthand for printing output.
  */
@@ -57,4 +59,17 @@ fun String.createFiles(): String {
     try { Path("src/resources/${this}_test2.txt").createFile() } catch (ignored: FileAlreadyExistsException) { /* Ignored */ }
 
     return this
+}
+
+fun findLCM(a: Long, b: Long): Long {
+    val larger = if (a > b) a else b
+    val maxLcm = a * b
+    var lcm = larger
+    while (lcm <= maxLcm) {
+        if (lcm % a == 0L && lcm % b == 0L) {
+            return lcm
+        }
+        lcm += larger
+    }
+    return maxLcm
 }
