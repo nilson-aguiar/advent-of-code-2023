@@ -1,5 +1,9 @@
 fun main() {
-    fun challengeInput(input: List<String>): Pair<CamelInstructions, List<CamelPosition>> {
+    fun challengeInput(
+        input: List<String>,
+        findStart: (CamelPosition) -> Boolean,
+        reachedEnd: (CamelPosition) -> Boolean
+    ): Long {
         val instructions = CamelInstructions(input.first())
 
         val camels = input.drop(2).map { line ->
@@ -16,25 +20,25 @@ fun main() {
                     CamelPosition(index, left, right)
                 }
         }.flatten()
-        return Pair(instructions, camels)
+
+        return CamelRun(camels)
+            .executeInstructions(instructions, camels.filter(findStart), reachedEnd)
+            .lcm()
     }
 
-    fun part1(input: List<String>): Long {
-        val (instructions, camels) = challengeInput(input)
-        val camelRun = CamelRun(camels)
+    fun part1(input: List<String>): Long =
+        challengeInput(
+            input,
+            findStart = { it.identifier == "AAA" },
+            reachedEnd = { it.identifier == "ZZZ" }
+        )
 
-        return camelRun.executeInstructions(instructions, listOf("AAA")) { camelPositions ->
-            camelPositions.all {
-                it.identifier == "ZZZ"
-            }
-        }
-    }
-
-    fun part2(input: List<String>): Long {
-        val (instructions, camels) = challengeInput(input)
-        val camelRun = CamelRun(camels)
-        return camelRun.executeInstructions(instructions)
-    }
+    fun part2(input: List<String>): Long =
+        challengeInput(
+            input,
+            findStart = { it.identifier.endsWith('A') },
+            reachedEnd = { it.identifier.endsWith('Z') }
+        )
 
     run("Day08".createFiles(), ::part1, ::part2, 6L, 6L)
 }
@@ -44,61 +48,28 @@ private class CamelRun(camels: List<CamelPosition>) {
 
     fun executeInstructions(
         camelInstructions: CamelInstructions,
-        starts: List<String>,
-        reachedEnd: (List<CamelPosition>) -> Boolean
-    ): Long {
+        starts: List<CamelPosition>,
+        reachedEnd: (CamelPosition) -> Boolean
+    ): List<Long> =
+        starts.map { start ->
+            var current = start
+            var steps = 0L
 
-        starts.map { camelsMap[it] ?: throw IllegalArgumentException("Missing final step $it") }
-
-
-        var current = starts.map { camelsMap[it] ?: throw IllegalArgumentException("Missing final step $it") }
-        var steps = 0L
-
-        generateSequence { camelInstructions.order() }
-            .takeWhile { !reachedEnd(current) }
-            .forEach {
-                it.takeWhile { !reachedEnd(current) }
-                    .forEach { step ->
-                        current = current.map { camelPosition ->
-                            camelsMap[step(camelPosition)] ?: throw IllegalStateException("Invalid position")
-                        }
-                        steps++
-                    }
-            }
-
-        return steps
-    }
-
-
-    fun executeInstructions(
-        camelInstructions: CamelInstructions
-    ): Long {
-
-        fun step(start: String) = camelInstructions.instructions.fold(start) { acc, char ->
-            when (char) {
-                'L' -> camelsMap[acc]!!.left
-                'R' -> camelsMap[acc]!!.right
-                else ->
-                    @Suppress("ThrowingExceptionsWithoutMessageOrCause", "UseCheckOrError")
-                    throw IllegalStateException()
-            }
-        }
-
-        return camelInstructions.instructions.length *
-                camelsMap.keys.filter { it.endsWith('A') }.fold(1L) { acc, start ->
-
-                    val (index, end) = generateSequence(start, ::step).withIndex()
-                        .first { (_, end) -> end.endsWith('Z') }
-                    check(step(start) == step(end)) { "required for lcm solution" }
-                    findLCM(acc, index.toLong())
+            generateSequence { camelInstructions.order() }
+                .flatten()
+                .takeWhile { !reachedEnd(current) }
+                .forEach { step ->
+                    current = camelsMap[step(current)] ?: throw IllegalStateException("Invalid position")
+                    steps++
                 }
-    }
+
+            steps
+        }
 }
 
 private data class CamelPosition(val identifier: String, val left: String, val right: String)
 
 private data class CamelInstructions(val instructions: String) {
-
     fun right(camelPosition: CamelPosition) = camelPosition.right
     fun left(camelPosition: CamelPosition) = camelPosition.left
 
@@ -111,6 +82,4 @@ private data class CamelInstructions(val instructions: String) {
             }
         }
     }
-
-
 }
