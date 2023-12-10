@@ -81,4 +81,3 @@ fun List<Long>.lcm(): Long =
 fun List<Int>.lcm(): Int =
     this.map { it.toLong() }.lcm().toInt()
 
-
